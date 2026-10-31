@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}All Product Categories — BrandBazaar{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Categories</li>
+    </ol>
+  </nav>
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h2 fw-bold mb-1">Explore All Categories</h1>
+      <p class="text-muted mb-0">Browse our complete collection of fashion, footwear, beauty, and electronics</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    {% for cat in categories %}
+      <div class="col-lg-6">
+        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+          <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+            <div>
+              <h3 class="h4 fw-bold mb-1">{{ cat.name }}</h3>
+              <p class="text-muted small mb-0">{{ cat.description|default:"Discover top quality items in this department" }}</p>
+            </div>
+            <a href="{{ cat.get_absolute_url }}" class="btn btn-sm btn-bb-primary">View All &rarr;</a>
+          </div>
+          <div class="card-body p-4">
+            <div class="row g-3">
+              {% for sub in cat.children.all %}
+                <div class="col-sm-6">
+                  <div class="p-3 bg-light rounded-3 h-100">
+                    <a href="{{ sub.get_absolute_url }}" class="fw-bold text-dark text-decoration-none d-block mb-2">
+                      {{ sub.name }} <i class="bi bi-chevron-right small text-primary"></i>
+                    </a>
+                    {% if sub.children.all %}
+                      <ul class="list-unstyled mb-0 small">
+                        {% for subchild in sub.children.all %}
+                          <li class="mb-1">
+                            <a href="{{ subchild.get_absolute_url }}" class="text-secondary text-decoration-none">
+                              • {{ subchild.name }}
+                            </a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

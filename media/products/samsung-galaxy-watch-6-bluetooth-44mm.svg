@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F0F9FF;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#E0F2FE;stop-opacity:1"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="15" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+  <circle cx="250" cy="250" r="180" fill="#FFFFFF" opacity="0.6"/>
+
+  <!-- Top Badge / Brand Header -->
+  <g transform="translate(30, 30)">
+    <rect x="0" y="0" width="100" height="26" rx="13" fill="#0284C7"/>
+    <text x="50" y="17" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF" text-anchor="middle">SMART TECH</text>
+    <text x="115" y="18" font-family="system-ui, sans-serif" font-size="14" font-weight="bold" fill="#475569">Samsung</text>
+  </g>
+
+  <!-- Center Product Illustration with Shadow -->
+  <g filter="url(#shadow)">
+    
+        <!-- Samsung Galaxy Watch 6 -->
+        <g transform="translate(170, 140)">
+          <!-- Straps -->
+          <rect x="45" y="0" width="70" height="60" fill="#334155"/>
+          <rect x="45" y="180" width="70" height="60" fill="#334155"/>
+          <!-- Circular Dial -->
+          <circle cx="80" cy="120" r="60" fill="#0F172A" stroke="#475569" stroke-width="6"/>
+          <circle cx="80" cy="120" r="50" fill="#020617"/>
+          <!-- Dial UI -->
+          <text x="80" y="115" font-family="'Courier New', monospace" font-size="24" font-weight="bold" fill="#38BDF8" text-anchor="middle">10:08</text>
+          <text x="80" y="135" font-family="sans-serif" font-size="11" fill="#22C55E" text-anchor="middle">♥ 74 BPM</text>
+        </g>
+        
+  </g>
+
+  <!-- Bottom Details Overlay -->
+  <rect x="30" y="420" width="440" height="50" rx="10" fill="#FFFFFF" opacity="0.95"/>
+  <text x="45" y="445" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#0F172A">Samsung Galaxy Watch 6 Bluetooth</text>
+  <text x="45" y="460" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#64748B">Sapphire Glass • BioActive Body Sensors</text>
+  <rect x="400" y="430" width="60" height="30" rx="6" fill="#F1F5F9"/>
+  <text x="430" y="450" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#0284C7" text-anchor="middle">OFFICIAL</text>
+</svg>

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}My Account Profile — BrandBazaar{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">My Profile</li>
+    </ol>
+  </nav>
+
+  <div class="row g-4">
+    <!-- Account Navigation Sidebar -->
+    <div class="col-lg-3">
+      <div class="bg-white p-3 rounded-4 border shadow-sm">
+        <div class="text-center p-3 border-bottom mb-3">
+          <div class="display-6 text-primary mb-2">
+            <i class="bi bi-person-circle"></i>
+          </div>
+          <h5 class="fw-bold mb-0">{{ user.first_name }} {{ user.last_name }}</h5>
+          <small class="text-muted">{{ user.email }}</small>
+        </div>
+
+        <ul class="nav flex-column nav-pills gap-1">
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'accounts:profile' %}"><i class="bi bi-person-gear me-2"></i>Profile Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'orders:order_history' %}"><i class="bi bi-box-seam me-2"></i>My Orders</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'wishlist:wishlist_detail' %}"><i class="bi bi-heart me-2"></i>My Wishlist</a>
+          </li>
+          <li class="nav-item">
+            <form method="post" action="{% url 'accounts:logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="nav-link text-danger border-0 bg-transparent w-100 text-start">
+                <i class="bi bi-box-arrow-right me-2"></i>Log Out
+              </button>
+            </form>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Profile Edit Form -->
+    <div class="col-lg-9">
+      <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+        <h3 class="fw-bold mb-1">Account & Shipping Details</h3>
+        <p class="text-muted small mb-4">Keep your name, email, and primary shipping address up to date for fast checkout.</p>
+
+        <form method="post">
+          {% csrf_token %}
+
+          <h5 class="fw-bold text-primary mb-3"><i class="bi bi-person me-2"></i>Personal Info</h5>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">First Name</label>
+              {{ u_form.first_name }}
+              {% if u_form.first_name.errors %}<div class="text-danger small">{{ u_form.first_name.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">Last Name</label>
+              {{ u_form.last_name }}
+              {% if u_form.last_name.errors %}<div class="text-danger small">{{ u_form.last_name.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="col-md-12">
+              <label class="form-label small fw-semibold">Email Address</label>
+              {{ u_form.email }}
+              {% if u_form.email.errors %}<div class="text-danger small">{{ u_form.email.errors.0 }}</div>{% endif %}
+            </div>
+          </div>
+
+          <h5 class="fw-bold text-primary mb-3"><i class="bi bi-geo-alt me-2"></i>Default Shipping Address</h5>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">Phone Number</label>
+              {{ p_form.phone }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">Postal PIN Code</label>
+              {{ p_form.pin_code }}
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-semibold">Address Line 1</label>
+              {{ p_form.address_line1 }}
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-semibold">Address Line 2 (Optional)</label>
+              {{ p_form.address_line2 }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">City</label>
+              {{ p_form.city }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">State</label>
+              {{ p_form.state }}
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-bb-primary px-4 py-2">
+            <i class="bi bi-save me-2"></i>Save Changes
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

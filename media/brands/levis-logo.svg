@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120" width="300" height="120">
+  <path d="M10 20 L290 20 L290 70 Q215 65 150 95 Q85 65 10 70 Z" fill="#C41230"/>
+  <text x="150" y="62" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="44" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">LEVI'S</text>
+  <circle cx="240" cy="40" r="4" fill="#FFFFFF"/>
+</svg>

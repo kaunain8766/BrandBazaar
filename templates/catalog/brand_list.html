@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}All Brands — BrandBazaar{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Brands</li>
+    </ol>
+  </nav>
+
+  <div class="mb-4">
+    <h1 class="h2 fw-bold mb-1">Our Partner Brands</h1>
+    <p class="text-muted mb-0">Shop guaranteed genuine products from world-leading apparel, footwear, beauty, and tech manufacturers.</p>
+  </div>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for brand in brands %}
+      <div class="col">
+        <a href="{{ brand.get_absolute_url }}" class="card h-100 border text-decoration-none shadow-sm rounded-4 hover-lift p-4 text-center">
+          <div class="d-flex align-items-center justify-content-center mb-3" style="height: 100px;">
+            {% if brand.logo %}
+              <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="img-fluid" style="max-height: 80px;">
+            {% else %}
+              <div class="fs-4 fw-bold text-dark">{{ brand.name }}</div>
+            {% endif %}
+          </div>
+          <h5 class="fw-bold text-dark mb-1">{{ brand.name }}</h5>
+          <p class="small text-muted mb-3">{{ brand.description|truncatewords:10 }}</p>
+          <span class="btn btn-sm btn-outline-primary mt-auto rounded-pill px-3">
+            Explore {{ brand.name }} &rarr;
+          </span>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

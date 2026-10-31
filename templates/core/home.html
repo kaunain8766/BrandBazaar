@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}BrandBazaar — Discover Your Style. Shop Your World.{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+  <!-- Hero Banner -->
+  <section class="hero-banner p-4 p-md-5 mb-5 rounded-4">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-3">
+          <i class="bi bi-stars me-1"></i> FESTIVAL OF BRANDS LIVE
+        </span>
+        <h1 class="display-4 fw-bold text-white mb-3">
+          Discover Your Style.<br>Shop Your World.
+        </h1>
+        <p class="lead text-light mb-4" style="max-width: 520px; opacity: 0.9;">
+          Explore 100% authentic collections from iconic brands like Levi's, Nike, Sony, and Zara with swift Pan-India delivery and hassle-free returns.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{% url 'catalog:product_list' %}" class="btn btn-primary btn-lg px-4 py-3 fw-bold rounded-pill shadow">
+            <i class="bi bi-bag-fill me-2"></i>Explore All Products
+          </a>
+          <a href="{% url 'catalog:category_detail' slug='clothes' %}" class="btn btn-outline-light btn-lg px-4 py-3 fw-bold rounded-pill">
+            Shop Clothes &rarr;
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-5 d-none d-lg-block text-center">
+        <div class="p-4 bg-white bg-opacity-10 rounded-4 border border-white border-opacity-25 shadow-lg">
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="p-3 bg-dark rounded-3 text-center border border-secondary border-opacity-50">
+                <i class="bi bi-tag-fill text-warning fs-2"></i>
+                <h5 class="text-white mt-2 mb-0">Up to 40% OFF</h5>
+                <small class="text-secondary">On Top Denim & Casuals</small>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-3 bg-dark rounded-3 text-center border border-secondary border-opacity-50">
+                <i class="bi bi-lightning-charge-fill text-info fs-2"></i>
+                <h5 class="text-white mt-2 mb-0">Audio Fest</h5>
+                <small class="text-secondary">Sony & boAt Wireless</small>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="p-3 bg-dark rounded-3 text-start border border-secondary border-opacity-50 d-flex align-items-center justify-content-between">
+                <div>
+                  <span class="badge bg-danger mb-1">FLASH SALE</span>
+                  <div class="text-white fw-bold">Nike Running & Puma Kicks</div>
+                </div>
+                <a href="{% url 'catalog:category_detail' slug='footwear' %}" class="btn btn-sm btn-outline-light rounded-pill">View</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop by Main Categories -->
+  <section class="mb-5">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <h2 class="h3 fw-bold mb-1">Shop by Category</h2>
+        <p class="text-muted mb-0">Handpicked selections across our main departments</p>
+      </div>
+      <a href="{% url 'catalog:category_list' %}" class="fw-bold text-decoration-none">
+        All Categories <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-4 g-3 g-md-4">
+      {% for cat in top_categories %}
+        <div class="col">
+          <a href="{{ cat.get_absolute_url }}" class="cat-pill-card group text-center p-3 bg-white rounded-4 border h-100 d-flex flex-column align-items-center justify-content-center shadow-sm">
+            <div class="cat-circle-img mb-3">
+              {% if cat.image %}
+                <img src="{{ cat.image.url }}" alt="{{ cat.name }}">
+              {% else %}
+                <div class="w-100 h-100 bg-primary bg-opacity-10 d-flex align-items-center justify-content-center text-primary fs-3">
+                  <i class="bi bi-collection"></i>
+                </div>
+              {% endif %}
+            </div>
+            <h5 class="cat-pill-title fw-bold mb-1">{{ cat.name }}</h5>
+            <small class="text-muted">{{ cat.children.count }} Subcategories</small>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Featured Brands Section -->
+  <section class="mb-5">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <h2 class="h3 fw-bold mb-1">Featured Brands</h2>
+        <p class="text-muted mb-0">Only 100% authentic, verified manufacturer partnerships</p>
+      </div>
+      <a href="{% url 'catalog:brand_list' %}" class="fw-bold text-decoration-none">
+        View All Brands <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5 g-3">
+      {% for b in featured_brands %}
+        <div class="col">
+          <a href="{{ b.get_absolute_url }}" class="brand-card h-100 d-flex flex-column align-items-center justify-content-center py-4">
+            {% if b.logo %}
+              <img src="{{ b.logo.url }}" alt="{{ b.name }}" class="mb-2 img-fluid">
+            {% else %}
+              <div class="fw-bold text-dark fs-5 mb-2">{{ b.name }}</div>
+            {% endif %}
+            <span class="small text-muted fw-semibold">{{ b.name }}</span>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Trending Products Section -->
+  {% if trending_products %}
+  <section class="mb-5">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <span class="badge bg-danger mb-1">HOT RIGHT NOW</span>
+        <h2 class="h3 fw-bold mb-0">Trending Products</h2>
+      </div>
+      <a href="{% url 'catalog:product_list' %}?sort=bestseller" class="fw-bold text-decoration-none">
+        View More <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      {% for product in trending_products %}
+        <div class="col">
+          <div class="bb-card">
+            <div class="product-img-wrapper">
+              {% if product.discount_percentage > 0 %}
+                <span class="product-badge-discount">{{ product.discount_percentage }}% OFF</span>
+              {% endif %}
+
+              <form action="{% url 'wishlist:toggle_wishlist' product.id %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="product-wishlist-toggle" title="Add to Wishlist" aria-label="Toggle Wishlist">
+                  <i class="bi bi-heart"></i>
+                </button>
+              </form>
+
+              {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+              {% endif %}
+            </div>
+
+            <div class="product-body">
+              {% if product.brand %}
+                <span class="product-brand">{{ product.brand.name }}</span>
+              {% endif %}
+              <a href="{{ product.get_absolute_url }}" class="product-title" title="{{ product.name }}">
+                {{ product.name }}
+              </a>
+
+              {% if product.average_rating %}
+                <div class="product-rating">
+                  <i class="bi bi-star-fill"></i>
+                  <span>{{ product.average_rating }}</span>
+                  <span class="text-muted">({{ product.review_count }})</span>
+                </div>
+              {% endif %}
+
+              <div class="product-price-row">
+                <span class="price-current">{{ CURRENCY_SYMBOL }}{{ product.price }}</span>
+                {% if product.original_price %}
+                  <span class="price-original">{{ CURRENCY_SYMBOL }}{{ product.original_price }}</span>
+                  <span class="price-save">Save {{ CURRENCY_SYMBOL }}{{ product.savings }}</span>
+                {% endif %}
+              </div>
+
+              <div class="d-grid mt-2">
+                <a href="{{ product.get_absolute_url }}" class="btn btn-sm btn-bb-outline">
+                  <i class="bi bi-eye me-1"></i>View Details
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Mid-Page Promotional Banner -->
+  <section class="p-4 p-md-5 my-5 rounded-4 text-white" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h3 class="fw-bold mb-2">Upgrade Your Denim Collection</h3>
+        <p class="mb-0 text-white-50 lead">
+          Discover authentic Levi's 511 Slim Fit jeans, classic denim western shirts, and vintage trucker jackets built to last.
+        </p>
+      </div>
+      <div class="col-md-4 text-md-end mt-3 mt-md-0">
+        <a href="{% url 'catalog:brand_detail' slug='levis' %}" class="btn btn-light btn-lg px-4 fw-bold rounded-pill text-primary shadow">
+          Explore Levi's &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Best Sellers Section -->
+  {% if bestsellers %}
+  <section class="mb-5">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <span class="badge bg-success mb-1">TOP RATED</span>
+        <h2 class="h3 fw-bold mb-0">Best Sellers</h2>
+      </div>
+      <a href="{% url 'catalog:product_list' %}" class="fw-bold text-decoration-none">
+        See All <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      {% for product in bestsellers %}
+        <div class="col">
+          <div class="bb-card">
+            <div class="product-img-wrapper">
+              {% if product.discount_percentage > 0 %}
+                <span class="product-badge-discount">{{ product.discount_percentage }}% OFF</span>
+              {% endif %}
+
+              <form action="{% url 'wishlist:toggle_wishlist' product.id %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="product-wishlist-toggle" title="Add to Wishlist" aria-label="Toggle Wishlist">
+                  <i class="bi bi-heart"></i>
+                </button>
+              </form>
+
+              {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+              {% endif %}
+            </div>
+
+            <div class="product-body">
+              {% if product.brand %}
+                <span class="product-brand">{{ product.brand.name }}</span>
+              {% endif %}
+              <a href="{{ product.get_absolute_url }}" class="product-title" title="{{ product.name }}">
+                {{ product.name }}
+              </a>
+
+              {% if product.average_rating %}
+                <div class="product-rating">
+                  <i class="bi bi-star-fill"></i>
+                  <span>{{ product.average_rating }}</span>
+                  <span class="text-muted">({{ product.review_count }})</span>
+                </div>
+              {% endif %}
+
+              <div class="product-price-row">
+                <span class="price-current">{{ CURRENCY_SYMBOL }}{{ product.price }}</span>
+                {% if product.original_price %}
+                  <span class="price-original">{{ CURRENCY_SYMBOL }}{{ product.original_price }}</span>
+                {% endif %}
+              </div>
+
+              <div class="d-grid mt-2">
+                <a href="{{ product.get_absolute_url }}" class="btn btn-sm btn-bb-outline">
+                  <i class="bi bi-eye me-1"></i>View Details
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Customer Benefits Row -->
+  <section class="my-5 py-4 border-top border-bottom">
+    <div class="row g-4">
+      <div class="col-md-3 col-6">
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <i class="bi bi-shield-check"></i>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-0">100% Authentic</h6>
+            <small class="text-muted">Direct from genuine brands</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <i class="bi bi-truck"></i>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-0">Pan-India Delivery</h6>
+            <small class="text-muted">Swift door delivery across PIN codes</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <i class="bi bi-arrow-counterclockwise"></i>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-0">Hassle-Free Returns</h6>
+            <small class="text-muted">7-day easy exchange guarantee</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <i class="bi bi-credit-card-2-front"></i>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-0">Cash on Delivery</h6>
+            <small class="text-muted">Pay securely at your doorstep</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

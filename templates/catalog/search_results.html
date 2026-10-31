@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Search results for "{{ search_query }}" — BrandBazaar{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Search</li>
+    </ol>
+  </nav>
+
+  <div class="bg-white p-4 rounded-4 border mb-4 shadow-sm">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h1 class="h3 fw-bold mb-1">
+          Search Results for "<span class="text-primary">{{ search_query }}</span>"
+        </h1>
+        <p class="text-muted small mb-0">Showing {{ total_count }} matching products</p>
+      </div>
+      <div class="col-md-4 text-md-end mt-3 mt-md-0">
+        <form method="get" action="{% url 'catalog:search' %}" class="d-inline-flex align-items-center gap-2">
+          <input type="hidden" name="q" value="{{ search_query }}">
+          <label class="small text-muted mb-0">Sort:</label>
+          <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()" style="width: auto;">
+            <option value="relevance" {% if sort == 'relevance' %}selected{% endif %}>Relevance</option>
+            <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+            <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+            <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest</option>
+          </select>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% if products %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      {% for product in products %}
+        <div class="col">
+          <div class="bb-card">
+            <div class="product-img-wrapper">
+              {% if product.discount_percentage > 0 %}
+                <span class="product-badge-discount">{{ product.discount_percentage }}% OFF</span>
+              {% endif %}
+
+              <form action="{% url 'wishlist:toggle_wishlist' product.id %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="product-wishlist-toggle" title="Add to Wishlist" aria-label="Toggle Wishlist">
+                  <i class="bi bi-heart"></i>
+                </button>
+              </form>
+
+              {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+              {% endif %}
+            </div>
+
+            <div class="product-body">
+              {% if product.brand %}
+                <span class="product-brand">{{ product.brand.name }}</span>
+              {% endif %}
+              <a href="{{ product.get_absolute_url }}" class="product-title" title="{{ product.name }}">
+                {{ product.name }}
+              </a>
+
+              <div class="product-price-row">
+                <span class="price-current">{{ CURRENCY_SYMBOL }}{{ product.price }}</span>
+                {% if product.original_price %}
+                  <span class="price-original">{{ CURRENCY_SYMBOL }}{{ product.original_price }}</span>
+                {% endif %}
+              </div>
+
+              <div class="d-grid mt-2">
+                <a href="{{ product.get_absolute_url }}" class="btn btn-sm btn-bb-outline">
+                  <i class="bi bi-eye me-1"></i>View Details
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if products.has_other_pages %}
+      <nav class="mt-5" aria-label="Search pagination">
+        <ul class="pagination justify-content-center">
+          {% if products.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?q={{ search_query }}&page={{ products.previous_page_number }}&sort={{ sort }}">&laquo; Previous</a>
+            </li>
+          {% endif %}
+
+          {% for num in products.paginator.page_range %}
+            {% if products.number == num %}
+              <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% else %}
+              <li class="page-item">
+                <a class="page-link" href="?q={{ search_query }}&page={{ num }}&sort={{ sort }}">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+
+          {% if products.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?q={{ search_query }}&page={{ products.next_page_number }}&sort={{ sort }}">Next &raquo;</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+
+  {% else %}
+    <!-- Useful Empty State -->
+    <div class="bg-white p-5 text-center rounded-4 border my-4">
+      <i class="bi bi-emoji-neutral text-muted display-3 mb-3 d-block"></i>
+      <h3 class="fw-bold mb-2">No results found for "{{ search_query }}"</h3>
+      <p class="text-muted mb-4" style="max-width: 500px; margin: 0 auto;">
+        We couldn't find any products matching your search term. Check your spelling or try searching for a brand like <strong>Levi's</strong>, <strong>Nike</strong>, or a category like <strong>Jeans</strong> or <strong>Shoes</strong>.
+      </p>
+      <div class="d-flex justify-content-center gap-2 flex-wrap">
+        <a href="{% url 'catalog:category_detail' slug='clothes' %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Clothes</a>
+        <a href="{% url 'catalog:category_detail' slug='footwear' %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Footwear</a>
+        <a href="{% url 'catalog:brand_detail' slug='levis' %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Levi's</a>
+        <a href="{% url 'catalog:product_list' %}" class="btn btn-sm btn-bb-primary rounded-pill px-3">Explore All</a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

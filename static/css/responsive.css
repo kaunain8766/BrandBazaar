@@ -1,0 +1,62 @@
+/* BrandBazaar Responsive Enhancements */
+
+@media (max-width: 991.98px) {
+  .hero-banner h1 {
+    font-size: 2rem;
+  }
+  
+  .mega-dropdown-menu {
+    width: 100%;
+    position: static !important;
+    transform: none !important;
+    box-shadow: none;
+    border: none;
+    padding: 0.5rem 0;
+  }
+  
+  .category-nav {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .category-nav .nav {
+    flex-wrap: nowrap;
+  }
+  
+  .header-action-btn span.action-label {
+    display: none;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .hero-banner {
+    padding: 2rem 1.25rem !important;
+    border-radius: var(--bb-radius);
+  }
+
+  .hero-banner h1 {
+    font-size: 1.6rem;
+  }
+  
+  .brand-logo {
+    font-size: 1.3rem;
+  }
+
+  .cat-circle-img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .cat-pill-title {
+    font-size: 0.75rem;
+  }
+  
+  .product-body {
+    padding: 0.75rem;
+  }
+  
+  .price-current {
+    font-size: 1rem;
+  }
+}

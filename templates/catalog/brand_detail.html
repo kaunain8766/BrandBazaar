@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ brand.name }} Collection — BrandBazaar{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'catalog:brand_list' %}">Brands</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ brand.name }}</li>
+    </ol>
+  </nav>
+
+  <!-- Brand Banner -->
+  <div class="bg-white p-4 p-md-5 rounded-4 border mb-4 shadow-sm">
+    <div class="row align-items-center">
+      <div class="col-md-3 text-center mb-3 mb-md-0">
+        {% if brand.logo %}
+          <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="img-fluid rounded-3 border p-2" style="max-height: 120px;">
+        {% else %}
+          <div class="display-6 fw-bold text-dark">{{ brand.name }}</div>
+        {% endif %}
+      </div>
+      <div class="col-md-9">
+        <span class="badge bg-primary px-3 py-1 rounded-pill mb-2">OFFICIAL BRAND STORE</span>
+        <h1 class="h2 fw-bold mb-2">{{ brand.name }}</h1>
+        <p class="text-secondary mb-2">{{ brand.description }}</p>
+        <span class="small text-muted fw-semibold">{{ total_count }} products available in stock</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Section -->
+  <div class="d-flex justify-content-between align-items-center mb-3 bg-white p-3 rounded-3 border">
+    <span class="small text-muted">Showing <strong>{{ products.paginator.count }}</strong> products</span>
+
+    <form method="get" class="d-flex align-items-center gap-2">
+      <label class="small text-muted mb-0">Sort:</label>
+      <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()" style="width: auto;">
+        <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest First</option>
+        <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+        <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+        <option value="name_asc" {% if sort == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
+      </select>
+    </form>
+  </div>
+
+  {% if products %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      {% for product in products %}
+        <div class="col">
+          <div class="bb-card">
+            <div class="product-img-wrapper">
+              {% if product.discount_percentage > 0 %}
+                <span class="product-badge-discount">{{ product.discount_percentage }}% OFF</span>
+              {% endif %}
+
+              <form action="{% url 'wishlist:toggle_wishlist' product.id %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="product-wishlist-toggle" title="Add to Wishlist" aria-label="Toggle Wishlist">
+                  <i class="bi bi-heart"></i>
+                </button>
+              </form>
+
+              {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+              {% endif %}
+            </div>
+
+            <div class="product-body">
+              <span class="product-brand">{{ brand.name }}</span>
+              <a href="{{ product.get_absolute_url }}" class="product-title" title="{{ product.name }}">
+                {{ product.name }}
+              </a>
+
+              <div class="product-price-row">
+                <span class="price-current">{{ CURRENCY_SYMBOL }}{{ product.price }}</span>
+                {% if product.original_price %}
+                  <span class="price-original">{{ CURRENCY_SYMBOL }}{{ product.original_price }}</span>
+                {% endif %}
+              </div>
+
+              <div class="d-grid mt-2">
+                <a href="{{ product.get_absolute_url }}" class="btn btn-sm btn-bb-outline">
+                  <i class="bi bi-eye me-1"></i>View Details
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if products.has_other_pages %}
+      <nav class="mt-5" aria-label="Brand products pagination">
+        <ul class="pagination justify-content-center">
+          {% if products.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ products.previous_page_number }}&sort={{ sort }}">&laquo; Previous</a>
+            </li>
+          {% endif %}
+
+          {% for num in products.paginator.page_range %}
+            {% if products.number == num %}
+              <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% else %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ num }}&sort={{ sort }}">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+
+          {% if products.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ products.next_page_number }}&sort={{ sort }}">Next &raquo;</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+
+  {% else %}
+    <div class="bg-white p-5 text-center rounded-4 border">
+      <h4 class="fw-bold">No Products Listed Yet</h4>
+      <p class="text-muted">Stay tuned as we add exciting new arrivals for {{ brand.name }}.</p>
+      <a href="{% url 'catalog:product_list' %}" class="btn btn-bb-primary">Browse All Products</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120" width="300" height="120">
+  <g transform="translate(60, 15) scale(0.7)">
+    <path d="M40 70 C30 50 45 25 70 20 C60 30 70 45 85 40 C105 35 125 10 145 15 C130 30 145 50 160 45 C180 40 200 20 220 25 C190 55 150 80 110 85 C80 90 50 85 40 70 Z" fill="#000000"/>
+  </g>
+  <text x="150" y="98" font-family="'Arial Black', sans-serif" font-weight="900" font-size="32" fill="#000000" text-anchor="middle" letter-spacing="4">PUMA</text>
+</svg>

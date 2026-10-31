@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}Shopping Cart — BrandBazaar{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+    </ol>
+  </nav>
+
+  <h1 class="h3 fw-bold mb-4">Your Shopping Cart</h1>
+
+  {% if cart_items %}
+    {% if has_out_of_stock %}
+      <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+        <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+        <div>
+          One or more items in your cart exceed our current available stock. Please reduce their quantities before proceeding to checkout.
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="row g-4">
+      <!-- Cart Items Table -->
+      <div class="col-lg-8">
+        <div class="bg-white rounded-4 border shadow-sm overflow-hidden mb-3">
+          <div class="table-responsive">
+            <table class="table cart-table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th scope="col" style="min-width: 250px;">Product</th>
+                  <th scope="col" class="text-center">Price</th>
+                  <th scope="col" class="text-center">Quantity</th>
+                  <th scope="col" class="text-end pe-3">Subtotal</th>
+                  <th scope="col" class="text-center" style="width: 50px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in cart_items %}
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center gap-3">
+                        <a href="{{ item.product.get_absolute_url }}" class="flex-shrink-0" style="width: 70px; height: 70px;">
+                          {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-100 h-100 object-fit-cover rounded-3 border">
+                          {% endif %}
+                        </a>
+                        <div>
+                          {% if item.product.brand %}
+                            <span class="product-brand mb-0">{{ item.product.brand.name }}</span>
+                          {% endif %}
+                          <a href="{{ item.product.get_absolute_url }}" class="fw-bold text-dark text-decoration-none d-block small">
+                            {{ item.product.name }}
+                          </a>
+                          {% if item.variant %}
+                            <span class="badge bg-light text-secondary border small mt-1">
+                              Variant: {{ item.variant.size }} {{ item.variant.color }}
+                            </span>
+                          {% endif %}
+
+                          {% if not item.is_in_stock %}
+                            <div class="text-danger small mt-1">
+                              <i class="bi bi-x-circle-fill me-1"></i>Only {{ item.available_stock }} available
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </td>
+
+                    <td class="text-center fw-semibold">
+                      {{ CURRENCY_SYMBOL }}{{ item.unit_price }}
+                    </td>
+
+                    <td class="text-center">
+                      <form action="{% url 'cart:update_cart_item' item.id %}" method="post" class="auto-submit-qty d-inline-block">
+                        {% csrf_token %}
+                        <div class="quantity-control">
+                          <button type="button" class="quantity-btn qty-minus" aria-label="Decrease">-</button>
+                          <input type="number" name="quantity" class="quantity-input" value="{{ item.quantity }}" min="1" max="{{ item.available_stock }}">
+                          <button type="button" class="quantity-btn qty-plus" aria-label="Increase">+</button>
+                        </div>
+                      </form>
+                    </td>
+
+                    <td class="text-end pe-3 fw-bold text-dark">
+                      {{ CURRENCY_SYMBOL }}{{ item.line_total }}
+                    </td>
+
+                    <td class="text-center">
+                      <form action="{% url 'cart:remove_from_cart' item.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm text-danger border-0 bg-transparent p-0" title="Remove item" aria-label="Remove">
+                          <i class="bi bi-trash3 fs-5"></i>
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-3 bg-light border-top d-flex justify-content-between align-items-center">
+            <a href="{% url 'catalog:product_list' %}" class="btn btn-sm btn-outline-secondary">
+              <i class="bi bi-arrow-left me-1"></i>Continue Shopping
+            </a>
+
+            <form action="{% url 'cart:clear_cart' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm text-danger border-0 bg-transparent" onclick="return confirm('Are you sure you want to clear your cart?');">
+                <i class="bi bi-x-circle me-1"></i>Clear Entire Cart
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary Card -->
+      <div class="col-lg-4">
+        <div class="summary-box">
+          <h4 class="fw-bold mb-3">Order Summary</h4>
+
+          <div class="summary-row">
+            <span class="text-secondary">Bag Items ({{ cart.total_items }}):</span>
+            <span class="fw-semibold">{{ CURRENCY_SYMBOL }}{{ cart.subtotal }}</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="text-secondary">Standard Delivery:</span>
+            {% if cart.shipping_charge == 0 %}
+              <span class="text-success fw-bold">FREE</span>
+            {% else %}
+              <span class="fw-semibold">{{ CURRENCY_SYMBOL }}{{ cart.shipping_charge }}</span>
+            {% endif %}
+          </div>
+
+          <div class="summary-row">
+            <span class="text-secondary">Estimated Taxes:</span>
+            <span class="text-muted small">Inclusive</span>
+          </div>
+
+          <div class="summary-row summary-total">
+            <span>Total Payable:</span>
+            <span class="text-primary">{{ CURRENCY_SYMBOL }}{{ cart.total }}</span>
+          </div>
+
+          <div class="d-grid mt-4">
+            <a href="{% url 'orders:checkout' %}" class="btn btn-bb-primary btn-lg py-3 fw-bold {% if has_out_of_stock %}disabled{% endif %}">
+              Proceed to Checkout &rarr;
+            </a>
+          </div>
+
+          <div class="mt-4 pt-3 border-top text-secondary small">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <i class="bi bi-shield-lock-fill text-success"></i>
+              <span>Safe and secure 256-bit encrypted checkout</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-cash-coin text-primary"></i>
+              <span>Cash on delivery available across India</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+    <!-- Empty Cart State -->
+    <div class="bg-white p-5 text-center rounded-4 border shadow-sm my-4">
+      <i class="bi bi-cart-x text-muted display-2 mb-3 d-block"></i>
+      <h3 class="fw-bold mb-2">Your Shopping Cart is Empty</h3>
+      <p class="text-muted mb-4" style="max-width: 480px; margin: 0 auto;">
+        Looks like you haven't added anything to your cart yet. Explore our latest arrivals from top fashion and electronics brands!
+      </p>
+      <div class="d-flex justify-content-center gap-3">
+        <a href="{% url 'catalog:product_list' %}" class="btn btn-bb-primary px-4 py-2">
+          <i class="bi bi-bag-plus me-2"></i>Start Shopping
+        </a>
+        <a href="{% url 'wishlist:wishlist_detail' %}" class="btn btn-bb-outline px-4 py-2">
+          <i class="bi bi-heart me-2"></i>View Saved Wishlist
+        </a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

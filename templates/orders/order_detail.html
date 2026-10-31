@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}Order #{{ order.order_number }} — BrandBazaar{% endblock %}
+
+{% block content %}
+<div class="container my-5" style="max-width: 950px;">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'orders:order_history' %}">My Orders</a></li>
+      <li class="breadcrumb-item active" aria-current="page">#{{ order.order_number }}</li>
+    </ol>
+  </nav>
+
+  <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm mb-4">
+    <!-- Order Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center pb-4 mb-4 border-bottom gap-3">
+      <div>
+        <span class="badge {% if order.order_status == 'Delivered' %}bg-success{% elif order.order_status == 'Cancelled' %}bg-danger{% else %}bg-primary{% endif %} px-3 py-2 fs-6 mb-2">
+          {{ order.order_status }}
+        </span>
+        <h1 class="h3 fw-bold mb-1">Order #{{ order.order_number }}</h1>
+        <small class="text-muted">Placed on {{ order.created_at|date:"l, d F Y - h:i A" }}</small>
+      </div>
+
+      <div class="d-flex gap-2">
+        {% if order.can_be_cancelled %}
+          <form action="{% url 'orders:cancel_order' order.order_number %}" method="post" onsubmit="return confirm('Are you sure you want to cancel this order? This action cannot be undone.');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger">
+              <i class="bi bi-x-circle me-1"></i>Cancel Order
+            </button>
+          </form>
+        {% endif %}
+        <a href="{% url 'orders:order_history' %}" class="btn btn-outline-secondary">
+          &larr; Back to Orders
+        </a>
+      </div>
+    </div>
+
+    <!-- Order Status Tracker Bar -->
+    {% if order.order_status != 'Cancelled' %}
+      <div class="p-4 bg-light rounded-4 mb-4">
+        <h6 class="fw-bold text-dark mb-3">Order Status Progression</h6>
+        <div class="row text-center position-relative">
+          <div class="col-3">
+            <i class="bi bi-receipt-cutoff fs-2 text-primary d-block mb-1"></i>
+            <span class="small fw-bold text-primary">Pending</span>
+          </div>
+          <div class="col-3">
+            <i class="bi bi-check-circle-fill fs-2 {% if order.order_status in 'Confirmed,Shipped,Delivered' %}text-primary{% else %}text-muted{% endif %} d-block mb-1"></i>
+            <span class="small fw-bold {% if order.order_status in 'Confirmed,Shipped,Delivered' %}text-primary{% else %}text-muted{% endif %}">Confirmed</span>
+          </div>
+          <div class="col-3">
+            <i class="bi bi-truck fs-2 {% if order.order_status in 'Shipped,Delivered' %}text-primary{% else %}text-muted{% endif %} d-block mb-1"></i>
+            <span class="small fw-bold {% if order.order_status in 'Shipped,Delivered' %}text-primary{% else %}text-muted{% endif %}">Shipped</span>
+          </div>
+          <div class="col-3">
+            <i class="bi bi-house-check-fill fs-2 {% if order.order_status == 'Delivered' %}text-success{% else %}text-muted{% endif %} d-block mb-1"></i>
+            <span class="small fw-bold {% if order.order_status == 'Delivered' %}text-success{% else %}text-muted{% endif %}">Delivered</span>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="alert alert-danger py-3 mb-4">
+        <i class="bi bi-exclamation-octagon-fill me-2 fs-5"></i>
+        This order was <strong>Cancelled</strong>. Any reserved inventory items have been safely returned to store stock.
+      </div>
+    {% endif %}
+
+    <!-- Order Items Table -->
+    <h5 class="fw-bold mb-3">Order Items ({{ order.total_items_count }})</h5>
+    <div class="table-responsive mb-4">
+      <table class="table align-middle">
+        <thead class="table-light small">
+          <tr>
+            <th>Product Name</th>
+            <th class="text-center">Price Snapshot</th>
+            <th class="text-center">Quantity</th>
+            <th class="text-end">Line Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order.items.all %}
+            <tr>
+              <td>
+                <div class="fw-bold text-dark">{{ item.product_name_snapshot }}</div>
+                {% if item.selected_variant_snapshot %}
+                  <span class="badge bg-light text-secondary border small mt-1">
+                    {{ item.selected_variant_snapshot }}
+                  </span>
+                {% endif %}
+              </td>
+              <td class="text-center">{{ CURRENCY_SYMBOL }}{{ item.unit_price_snapshot }}</td>
+              <td class="text-center">{{ item.quantity }}</td>
+              <td class="text-end fw-bold">{{ CURRENCY_SYMBOL }}{{ item.line_total }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Summary & Addresses Row -->
+    <div class="row g-4 pt-3 border-top">
+      <div class="col-md-6">
+        <h6 class="fw-bold text-dark mb-2"><i class="bi bi-geo-alt-fill text-primary me-2"></i>Shipping Address</h6>
+        <div class="p-3 bg-light rounded-3 text-secondary small">
+          <strong>{{ order.full_name }}</strong><br>
+          {{ order.address_line1 }}<br>
+          {% if order.address_line2 %}{{ order.address_line2 }}<br>{% endif %}
+          {{ order.city }}, {{ order.state }} - {{ order.pin_code }}<br>
+          Phone: {{ order.phone }}<br>
+          Email: {{ order.email }}
+          {% if order.order_notes %}
+            <div class="mt-2 pt-2 border-top text-dark">
+              <em>Notes: {{ order.order_notes }}</em>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <h6 class="fw-bold text-dark mb-2"><i class="bi bi-receipt text-primary me-2"></i>Payment & Price Breakdown</h6>
+        <div class="p-3 bg-light rounded-3 small">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-secondary">Payment Method:</span>
+            <strong>{{ order.get_payment_method_display }}</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-secondary">Payment Status:</span>
+            <span class="badge bg-secondary">{{ order.get_payment_status_display }}</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-secondary">Subtotal:</span>
+            <strong>{{ CURRENCY_SYMBOL }}{{ order.subtotal }}</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-secondary">Shipping Charge:</span>
+            <strong class="text-success">{{ CURRENCY_SYMBOL }}{{ order.shipping_charge }}</strong>
+          </div>
+          <div class="d-flex justify-content-between pt-2 border-top fs-6 fw-bold text-dark">
+            <span>Grand Total:</span>
+            <span class="text-primary">{{ CURRENCY_SYMBOL }}{{ order.total }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

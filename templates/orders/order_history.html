@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}My Order History — BrandBazaar{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'accounts:profile' %}">Account</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Order History</li>
+    </ol>
+  </nav>
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h3 fw-bold mb-1">My Orders</h1>
+      <p class="text-muted small mb-0">Track shipments, view invoices, and manage past purchases</p>
+    </div>
+  </div>
+
+  {% if orders %}
+    <div class="row g-4">
+      {% for order in orders %}
+        <div class="col-12">
+          <div class="card border rounded-4 shadow-sm overflow-hidden">
+            <!-- Header bar -->
+            <div class="card-header bg-light p-3 d-flex flex-wrap justify-content-between align-items-center gap-2 small">
+              <div class="d-flex flex-wrap gap-4">
+                <div>
+                  <span class="text-secondary d-block">Order Placed</span>
+                  <strong>{{ order.created_at|date:"d M Y" }}</strong>
+                </div>
+                <div>
+                  <span class="text-secondary d-block">Total</span>
+                  <strong class="text-dark">{{ CURRENCY_SYMBOL }}{{ order.total }}</strong>
+                </div>
+                <div>
+                  <span class="text-secondary d-block">Ship To</span>
+                  <strong>{{ order.full_name }}</strong>
+                </div>
+              </div>
+              <div class="text-md-end">
+                <span class="text-secondary d-block">Order #{{ order.order_number }}</span>
+                <span class="badge {% if order.order_status == 'Delivered' %}bg-success{% elif order.order_status == 'Cancelled' %}bg-danger{% else %}bg-primary{% endif %}">
+                  {{ order.order_status }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="card-body p-4">
+              <div class="row align-items-center g-3">
+                <div class="col-md-8">
+                  <div class="d-flex flex-column gap-2">
+                    {% for item in order.items.all %}
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="benefit-icon bg-light text-primary flex-shrink-0" style="width: 38px; height: 38px;">
+                          <i class="bi bi-box"></i>
+                        </div>
+                        <div>
+                          <div class="fw-bold text-dark small">{{ item.product_name_snapshot }}</div>
+                          <small class="text-muted">
+                            Qty: {{ item.quantity }} | {{ CURRENCY_SYMBOL }}{{ item.unit_price_snapshot }}
+                            {% if item.selected_variant_snapshot %}• {{ item.selected_variant_snapshot }}{% endif %}
+                          </small>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+
+                <div class="col-md-4 text-md-end">
+                  <a href="{% url 'orders:order_detail' order.order_number %}" class="btn btn-sm btn-bb-primary px-3 mb-2 d-inline-block">
+                    <i class="bi bi-eye me-1"></i>View Order Details
+                  </a>
+                  {% if order.can_be_cancelled %}
+                    <form action="{% url 'orders:cancel_order' order.order_number %}" method="post" class="d-inline-block" onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-outline-danger px-3">
+                        Cancel Order
+                      </button>
+                    </form>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="bg-white p-5 text-center rounded-4 border shadow-sm my-4">
+      <i class="bi bi-box-seam text-muted display-3 mb-3 d-block"></i>
+      <h3 class="fw-bold mb-2">No Orders Placed Yet</h3>
+      <p class="text-muted mb-4" style="max-width: 480px; margin: 0 auto;">
+        When you place orders on BrandBazaar, you'll be able to track live delivery progress, download receipts, and manage items here.
+      </p>
+      <a href="{% url 'catalog:product_list' %}" class="btn btn-bb-primary px-4 py-2">
+        <i class="bi bi-bag me-2"></i>Start Shopping
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

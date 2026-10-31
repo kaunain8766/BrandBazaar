@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120" width="300" height="120">
+  <circle cx="150" cy="35" r="18" fill="#1E3A8A"/>
+  <path d="M142 35 L150 25 L158 35 L150 45 Z" fill="#F59E0B"/>
+  <text x="150" y="75" font-family="'Trajan Pro', 'Georgia', serif" font-weight="bold" font-size="22" fill="#1E293B" text-anchor="middle" letter-spacing="3">ALLEN SOLLY</text>
+  <text x="150" y="94" font-family="sans-serif" font-size="11" fill="#64748B" text-anchor="middle" letter-spacing="2">ESTD 1744 • NOTTINGHAM</text>
+</svg>

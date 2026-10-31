@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120" width="300" height="120">
+  <path d="M40 75 Q110 95 180 50 Q230 20 270 15 Q210 55 150 78 Q90 98 40 75 Z" fill="#111111"/>
+  <text x="150" y="105" font-family="'Impact', Arial Black, sans-serif" font-style="italic" font-size="34" fill="#111111" text-anchor="middle" letter-spacing="3">NIKE</text>
+</svg>

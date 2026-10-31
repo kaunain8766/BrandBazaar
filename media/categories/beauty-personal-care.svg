@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EC4899;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#831843;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  <!-- Skincare serum dropper bottle -->
+  <g transform="translate(100, 90)">
+    <!-- Bottle body -->
+    <rect x="50" y="80" width="70" height="130" rx="15" fill="#FFFFFF" opacity="0.95"/>
+    <rect x="65" y="55" width="40" height="25" fill="#CBD5E1"/>
+    <path d="M75 55 Q85 30 85 20 Q85 30 95 55 Z" fill="#F43F5E"/>
+    <!-- Label -->
+    <rect x="55" y="110" width="60" height="60" rx="4" fill="#FDF2F8"/>
+    <line x1="65" y1="130" x2="105" y2="130" stroke="#DB2777" stroke-width="3"/>
+    <line x1="70" y1="145" x2="100" y2="145" stroke="#94A3B8" stroke-width="2"/>
+  </g>
+  <!-- Lipstick alongside -->
+  <g transform="translate(220, 150)">
+    <rect x="15" y="60" width="35" height="70" rx="4" fill="#1E293B"/>
+    <rect x="20" y="40" width="25" height="20" fill="#D4AF37"/>
+    <polygon points="20,40 32,5 45,40" fill="#E11D48"/>
+  </g>
+  <text x="200" y="355" font-family="system-ui, sans-serif" font-weight="bold" font-size="22" fill="#FFFFFF" text-anchor="middle">BEAUTY &amp; CARE</text>
+</svg>

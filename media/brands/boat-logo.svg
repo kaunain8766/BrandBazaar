@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120" width="300" height="120">
+  <polygon points="120,25 150,65 120,65" fill="#E11D48"/>
+  <polygon points="155,15 185,65 155,65" fill="#BE123C"/>
+  <path d="M110 72 L190 72 Q150 90 110 72 Z" fill="#E11D48"/>
+  <text x="150" y="106" font-family="'Century Gothic', sans-serif" font-weight="bold" font-size="28" fill="#111827" text-anchor="middle" letter-spacing="2">bo<tspan fill="#E11D48">A</tspan>t</text>
+</svg>

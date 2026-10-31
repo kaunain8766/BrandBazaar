@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us — BrandBazaar{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">About Us</li>
+    </ol>
+  </nav>
+
+  <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+    <div class="row align-items-center mb-5">
+      <div class="col-lg-7">
+        <span class="badge bg-primary px-3 py-2 rounded-pill fw-bold mb-3">OUR MISSION</span>
+        <h1 class="fw-bold mb-3">Welcome to BrandBazaar</h1>
+        <p class="lead text-muted">
+          "Discover Your Style. Shop Your World."
+        </p>
+        <p class="text-secondary">
+          BrandBazaar was founded with a single mission: to create a premium, dependable Indian e-commerce marketplace where shoppers can access authentic global and Indian brands across apparel, footwear, beauty, and electronics with complete peace of mind.
+        </p>
+        <p class="text-secondary">
+          From iconic American denim brands like Levi's to world-class athletic wear from Nike and Puma, cutting-edge audio tech from Sony and boAt, and dermatologically tested skincare from L'Oréal, BrandBazaar curates quality without compromise.
+        </p>
+      </div>
+      <div class="col-lg-5 text-center">
+        <div class="p-4 bg-light rounded-4 border text-center">
+          <i class="bi bi-shop text-primary display-1 mb-3"></i>
+          <h4 class="fw-bold">100% Verified Quality</h4>
+          <p class="small text-muted mb-0">Every product listed on BrandBazaar is sourced strictly from authorized distributors and verified manufacturer channels.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 pt-4 border-top">
+      <div class="col-md-4">
+        <div class="p-3 border rounded-3 h-100">
+          <i class="bi bi-shield-check text-success fs-2 mb-2"></i>
+          <h5 class="fw-bold">Authenticity Guaranteed</h5>
+          <p class="text-muted small mb-0">Zero tolerance for counterfeit goods. All products ship with original manufacturer warranties and seals.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 border rounded-3 h-100">
+          <i class="bi bi-geo-alt-fill text-danger fs-2 mb-2"></i>
+          <h5 class="fw-bold">Pan-India Reach</h5>
+          <p class="text-muted small mb-0">Delivering to over 19,000 PIN codes across metro cities, tier-2, and tier-3 towns across India.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 border rounded-3 h-100">
+          <i class="bi bi-headset text-primary fs-2 mb-2"></i>
+          <h5 class="fw-bold">Customer First Support</h5>
+          <p class="text-muted small mb-0">Dedicated support team responsive to customer inquiries, tracking updates, and simple return handoffs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

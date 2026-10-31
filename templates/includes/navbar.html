@@ -1,0 +1,184 @@
+{% load static %}
+<!-- Announcement Top Bar -->
+<div class="announcement-bar text-center">
+  <div class="container">
+    <span>✨ <strong>BrandBazaar Special:</strong> Enjoy Free Shipping across India on all prepaid & COD orders!</span>
+  </div>
+</div>
+
+<!-- Main Sticky Header -->
+<header class="bb-header py-2 py-md-3">
+  <div class="container">
+    <div class="row align-items-center">
+      <!-- Brand Logo -->
+      <div class="col-6 col-md-3 col-lg-2">
+        <a href="{% url 'core:home' %}" class="brand-logo">
+          <i class="bi bi-bag-check-fill"></i>
+          <span>Brand<span class="brand-highlight">Bazaar</span></span>
+        </a>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="col-12 col-md-5 col-lg-6 order-3 order-md-2 mt-2 mt-md-0">
+        <form action="{% url 'catalog:search' %}" method="get" class="header-search-form" role="search">
+          <input
+            type="search"
+            name="q"
+            class="form-control"
+            placeholder="Search for clothes, Levi's jeans, Nike shoes, Sony headphones..."
+            value="{{ search_query|default:'' }}"
+            aria-label="Search"
+            required
+          >
+          <button type="submit" aria-label="Submit search">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- Action Nav Items -->
+      <div class="col-6 col-md-4 col-lg-4 order-2 order-md-3 text-end">
+        <div class="d-inline-flex align-items-center gap-1 gap-md-2">
+          
+          <!-- Wishlist -->
+          <a href="{% url 'wishlist:wishlist_detail' %}" class="header-action-btn" title="My Wishlist">
+            <i class="bi bi-heart fs-5"></i>
+            <span class="action-label d-none d-lg-inline">Wishlist</span>
+            {% if wishlist_items_count > 0 %}
+              <span class="badge-counter">{{ wishlist_items_count }}</span>
+            {% endif %}
+          </a>
+
+          <!-- Cart -->
+          <a href="{% url 'cart:cart_detail' %}" class="header-action-btn" title="Shopping Cart">
+            <i class="bi bi-cart3 fs-5"></i>
+            <span class="action-label d-none d-lg-inline">Cart</span>
+            {% if cart_items_count > 0 %}
+              <span class="badge-counter">{{ cart_items_count }}</span>
+            {% endif %}
+          </a>
+
+          <!-- User Account -->
+          <div class="dropdown d-inline-block">
+            <button class="header-action-btn border-0 bg-transparent dropdown-toggle" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-5"></i>
+              <span class="action-label d-none d-md-inline">
+                {% if user.is_authenticated %}
+                  {{ user.first_name|default:user.username }}
+                {% else %}
+                  Account
+                {% endif %}
+              </span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userMenuButton">
+              {% if user.is_authenticated %}
+                <li class="px-3 py-2 border-bottom">
+                  <small class="text-muted d-block">Signed in as</small>
+                  <strong>{{ user.username }}</strong>
+                </li>
+                <li><a class="dropdown-item py-2" href="{% url 'accounts:profile' %}"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                <li><a class="dropdown-item py-2" href="{% url 'orders:order_history' %}"><i class="bi bi-box-seam me-2"></i>My Orders</a></li>
+                <li><a class="dropdown-item py-2" href="{% url 'wishlist:wishlist_detail' %}"><i class="bi bi-heart me-2"></i>My Wishlist</a></li>
+                {% if user.is_staff %}
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item py-2 text-primary" href="{% url 'admin:index' %}" target="_blank"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</a></li>
+                {% endif %}
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <form method="post" action="{% url 'accounts:logout' %}" class="px-2">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item py-2 text-danger w-100 text-start rounded">
+                      <i class="bi bi-box-arrow-right me-2"></i>Log Out
+                    </button>
+                  </form>
+                </li>
+              {% else %}
+                <li><a class="dropdown-item py-2" href="{% url 'accounts:login' %}"><i class="bi bi-box-arrow-in-right me-2"></i>Sign In</a></li>
+                <li><a class="dropdown-item py-2" href="{% url 'accounts:register' %}"><i class="bi bi-person-plus me-2"></i>Register</a></li>
+              {% endif %}
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Category Navigation Bar -->
+<nav class="category-nav navbar navbar-expand-lg py-0">
+  <div class="container">
+    <button class="navbar-toggler my-2 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#categoryNavbar" aria-controls="categoryNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      <span class="ms-2 fs-6 fw-bold">Browse Categories</span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="categoryNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="cat-nav-link" href="{% url 'core:home' %}"><i class="bi bi-house-door me-1"></i>Home</a>
+        </li>
+
+        {% for cat in nav_categories %}
+          {% if cat.children.all %}
+            <li class="nav-item dropdown">
+              <a class="cat-nav-link dropdown-toggle" href="{{ cat.get_absolute_url }}" id="catDrop-{{ cat.slug }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ cat.name }}
+              </a>
+              <div class="dropdown-menu mega-dropdown-menu" aria-labelledby="catDrop-{{ cat.slug }}">
+                <div class="row g-3">
+                  {% for subcat in cat.children.all %}
+                    <div class="col-md-4">
+                      <a href="{{ subcat.get_absolute_url }}" class="fw-bold text-dark text-decoration-none d-block mb-2 pb-1 border-bottom">
+                        {{ subcat.name }}
+                      </a>
+                      {% if subcat.children.all %}
+                        <ul class="list-unstyled mb-0">
+                          {% for child in subcat.children.all %}
+                            <li class="mb-1">
+                              <a href="{{ child.get_absolute_url }}" class="text-secondary text-decoration-none small hover-primary">
+                                {{ child.name }}
+                              </a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% else %}
+                        <a href="{{ subcat.get_absolute_url }}" class="btn btn-sm btn-outline-secondary mt-1">View All {{ subcat.name }}</a>
+                      {% endif %}
+                    </div>
+                  {% endfor %}
+                  <div class="col-12 mt-3 pt-2 border-top text-end">
+                    <a href="{{ cat.get_absolute_url }}" class="btn btn-sm btn-bb-primary">Explore All {{ cat.name }} &rarr;</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="cat-nav-link" href="{{ cat.get_absolute_url }}">{{ cat.name }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+        <!-- Featured Brands direct link -->
+        <li class="nav-item dropdown">
+          <a class="cat-nav-link dropdown-toggle" href="{% url 'catalog:brand_list' %}" id="brandMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Brands
+          </a>
+          <ul class="dropdown-menu shadow border-0" aria-labelledby="brandMenu">
+            <li><a class="dropdown-item fw-bold border-bottom" href="{% url 'catalog:brand_list' %}">All Brands</a></li>
+            {% for b in featured_brands_nav %}
+              <li><a class="dropdown-item" href="{{ b.get_absolute_url }}">{{ b.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+      </ul>
+
+      <div class="d-none d-lg-flex align-items-center">
+        <a href="{% url 'catalog:product_list' %}" class="btn btn-sm btn-outline-dark fw-bold rounded-pill px-3">
+          <i class="bi bi-grid-3x3-gap me-1"></i>All Products
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

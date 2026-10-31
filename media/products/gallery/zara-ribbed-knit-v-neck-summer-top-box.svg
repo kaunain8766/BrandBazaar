@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F1F5F9;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#CBD5E1;stop-opacity:1"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="15" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+  <circle cx="250" cy="250" r="180" fill="#FFFFFF" opacity="0.6"/>
+
+  <!-- Top Badge / Brand Header -->
+  <g transform="translate(30, 30)">
+    <rect x="0" y="0" width="100" height="26" rx="13" fill="#475569"/>
+    <text x="50" y="17" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF" text-anchor="middle">BOX PACK</text>
+    <text x="115" y="18" font-family="system-ui, sans-serif" font-size="14" font-weight="bold" fill="#475569">Zara</text>
+  </g>
+
+  <!-- Center Product Illustration with Shadow -->
+  <g filter="url(#shadow)">
+    
+        <!-- Ribbed Top -->
+        <path d="M215 150 L285 150 L295 290 L205 290 Z" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="3"/>
+        <line x1="225" y1="160" x2="225" y2="280" stroke="#E2E8F0" stroke-width="3"/>
+        <line x1="245" y1="160" x2="245" y2="280" stroke="#E2E8F0" stroke-width="3"/>
+        <line x1="265" y1="160" x2="265" y2="280" stroke="#E2E8F0" stroke-width="3"/>
+        <line x1="275" y1="160" x2="275" y2="280" stroke="#E2E8F0" stroke-width="3"/>
+        
+  </g>
+
+  <!-- Bottom Details Overlay -->
+  <rect x="30" y="420" width="440" height="50" rx="10" fill="#FFFFFF" opacity="0.95"/>
+  <text x="45" y="445" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#0F172A">Zara Ribbed Knit V-Neck S (Packaging)</text>
+  <text x="45" y="460" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#64748B">Official Retail Sealed Box</text>
+  <rect x="400" y="430" width="60" height="30" rx="6" fill="#F1F5F9"/>
+  <text x="430" y="450" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">OFFICIAL</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#FEFCE8;stop-opacity:1"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="15" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+  <circle cx="250" cy="250" r="180" fill="#FFFFFF" opacity="0.6"/>
+
+  <!-- Top Badge / Brand Header -->
+  <g transform="translate(30, 30)">
+    <rect x="0" y="0" width="100" height="26" rx="13" fill="#1E3A8A"/>
+    <text x="50" y="17" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF" text-anchor="middle">ZOOM DETAIL</text>
+    <text x="115" y="18" font-family="system-ui, sans-serif" font-size="14" font-weight="bold" fill="#475569">Puma</text>
+  </g>
+
+  <!-- Center Product Illustration with Shadow -->
+  <g filter="url(#shadow)">
+    
+        <!-- Puma Smash v2 Silhouette -->
+        <g transform="translate(100, 190) scale(1.1)">
+          <!-- Rubber Cupsole -->
+          <path d="M25 105 Q150 110 265 95 Q270 120 250 125 Q140 130 25 125 Z" fill="#FEF3C7" stroke="#FDE68A" stroke-width="2"/>
+          <!-- White Leather Upper -->
+          <path d="M35 105 Q70 45 135 60 L195 70 Q260 80 265 95 Q140 105 35 105 Z" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+          <!-- Formstrip wave -->
+          <path d="M80 95 Q145 65 210 90 L205 100 Q145 78 80 98 Z" fill="#1E3A8A"/>
+        </g>
+        
+  </g>
+
+  <!-- Bottom Details Overlay -->
+  <rect x="30" y="420" width="440" height="50" rx="10" fill="#FFFFFF" opacity="0.95"/>
+  <text x="45" y="445" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" fill="#0F172A">Puma Smash v2 Classic Lea (Detail View)</text>
+  <text x="45" y="460" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#64748B">Close-Up Material & Build Texture</text>
+  <rect x="400" y="430" width="60" height="30" rx="6" fill="#F1F5F9"/>
+  <text x="430" y="450" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#1E3A8A" text-anchor="middle">OFFICIAL</text>
+</svg>
